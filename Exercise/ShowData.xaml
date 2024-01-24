@@ -1,0 +1,15 @@
+﻿<Window x:Class="Exercise1.ShowData"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Exercise1"
+        mc:Ignorable="d"
+        Title="ShowData" Height="450" Width="800">
+    <Grid>
+        <DataGrid x:Name="dtgDataShow" HorizontalAlignment="Center" Height="323" Margin="0,59,0,0" VerticalAlignment="Top" Width="688" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <Button x:Name="btnShow" Content="Show" HorizontalAlignment="Center" Height="23" Margin="0,31,0,0" VerticalAlignment="Top" Width="80" Click="btnShow_Click"/>
+        <TextBox x:Name="txtTime" HorizontalAlignment="Left" Height="22" Margin="598,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="86" TextChanged="TextBox_TextChanged"/>
+
+    </Grid>
+</Window>

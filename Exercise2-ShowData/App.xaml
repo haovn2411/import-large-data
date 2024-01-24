@@ -1,8 +1,8 @@
-﻿<Application x:Class="Exercise.App"
+﻿<Application x:Class="Exercise2_ShowData.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Exercise"
-             StartupUri="ShowData.xaml">
+             xmlns:local="clr-namespace:Exercise2_ShowData"
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
          
     </Application.Resources>

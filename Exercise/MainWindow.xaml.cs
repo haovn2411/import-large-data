@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using Exercise1;
 using Exercise1.Entity;
 using Microsoft.Data.SqlClient;
@@ -76,8 +77,12 @@ namespace Exercise
             //var schoolYear = context.SchoolYears.ToList().Where(x => x.ExamYear == cbSchoolYears.SelectedValue).FirstOrDefault();
             //var listSubject = context.Subjects.ToList();
 
+            var year = int.Parse(cbSchoolYears.SelectedValue as string);
+            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture);
+            configuration.HeaderValidated = null; // Ignore header validation
+            configuration.MissingFieldFound = null;
             using (var reader = new StreamReader(filePathSelected))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            using (var csv = new CsvReader(reader, configuration))
             {
                 var records = csv.GetRecords<ScoreObject>().ToList();
 
@@ -88,7 +93,7 @@ namespace Exercise
                 string destinationTableName = "Score";
 
                 // Create DataTable
-                DataTable dataTable = CreateDataTable(records);
+                DataTable dataTable = CreateDataTable(records, year);
 
                 // Bulk insert
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -112,6 +117,7 @@ namespace Exercise
                         bulkCopy.ColumnMappings.Add("geography", "geography");
                         bulkCopy.ColumnMappings.Add("civic_education", "civic_education");
                         bulkCopy.ColumnMappings.Add("english", "english");
+                        bulkCopy.ColumnMappings.Add("year", "year");
 
                         // Set options (optional)
                         bulkCopy.BatchSize = 1000; // Number of rows in each batch
@@ -128,7 +134,7 @@ namespace Exercise
             txtTime.Text = stopwatch.Elapsed.ToString();
         }
 
-        private static DataTable CreateDataTable(List<ScoreObject> dataList)
+        private static DataTable CreateDataTable(List<ScoreObject> dataList, int year)
         {
             DataTable dataTable = new DataTable();
 
@@ -145,6 +151,8 @@ namespace Exercise
             dataTable.Columns.Add("geography", typeof(double));
             dataTable.Columns.Add("civic_education", typeof(double));
             dataTable.Columns.Add("english", typeof(double));
+            dataTable.Columns.Add("year", typeof(int));
+
 
             // Add other columns as needed
 
@@ -164,6 +172,8 @@ namespace Exercise
                 row["geography"] = returnScore(dataItem.geography);
                 row["civic_education"] = returnScore(dataItem.civic_education);
                 row["english"] = returnScore(dataItem.english);
+                row["year"] = year;
+
 
                 // Set other column values
                 dataTable.Rows.Add(row);
@@ -176,7 +186,7 @@ namespace Exercise
         {
             if (string.IsNullOrEmpty(stringScore))
             {
-                return 0;
+                return -1;
             }
             return double.Parse(stringScore);
         }
